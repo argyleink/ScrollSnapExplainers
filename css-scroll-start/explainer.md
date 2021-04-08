@@ -47,4 +47,4 @@ There are no known privacy impact of this feature.
 There are no known security impacts of this feature.
 
 ## Contributing
-For now, please use this [Discussion](https://github.com/argyleink/ScrollSnapExplainers/discussions/3) for comments and questions, or a Pull Request to offer changes 🙏
+For now, please use this [Discussion](https://github.com/argyleink/ScrollSnapExplainers/discussions/4) for comments and questions, or a Pull Request to offer changes 🙏
