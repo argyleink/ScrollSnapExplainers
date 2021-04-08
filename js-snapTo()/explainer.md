@@ -1,4 +1,4 @@
-# JS snapChanged event
+# JS snapTo() method
 
 ## Status of this Document
 This document is intended as a starting point for engaging the community and standards bodies in developing collaborative solutions fit for standardization. As the solutions to
