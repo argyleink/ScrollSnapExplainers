@@ -18,12 +18,16 @@ To empower the scroll snapping container with an API for iterating through snap 
 
 ## Use Cases
 
+Wiring up "snap to last" or "snap to the clicked item" should be trivial methods to call on a snap container:
+
 1. Carousels
 2. Sliders
 3. Tabousels or Carotabs
 4. Media galleries
 5. Slides
 6. Click/tap and snap to item
+
+> Interestingly, the keyboard already has access to `next` and `previous` via the arrows, or something like it. 
 
 ## Proposed Solution
 
