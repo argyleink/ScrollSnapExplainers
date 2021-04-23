@@ -5,7 +5,7 @@ This document is intended as a starting point for engaging the community and sta
 problems described in this document progress along the standards-track, we will retain this document as an archive and use this section to keep the community up-to-date with the
 most current standards venue and content location of future work and discussions.
 * This document status: **Active**
-* Expected venue: ?
+* Expected venue: [W3C](https://www.w3.org)
 * Current version: this document
 
 ## Introduction
