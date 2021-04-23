@@ -10,30 +10,38 @@ most current standards venue and content location of future work and discussions
 
 ## Introduction
 
-todo
+[Scroll snap points](https://www.w3.org/TR/css-scroll-snap-1/) are an important and powerful CSS feature. They enable the creation of pointer agnostic stepped scroll experiences, and do so very succinctly. The problem is, they're often used alongside adjacent elements which need to represent this stepped state of scroll, aka the user needs a way to see the state of the snap. Developers today write Javascript observers or create custom functions to monitor and drive this state. 
 
 ## Goals
 
-* todo
+To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including 2-dimensional matrix layouts.
 
 ## Use Cases
 
-todo
+1. Carousels
+2. Sliders
+3. Tabousels or Carotabs
+4. Media galleries
+5. Slides
+6. Click/tap and snap to item
 
 ## Proposed Solution
 
-todo
+### `snapTo(<axis>, <string | node>)`
+- `<axis>` accepts
+    - strings (x | y)
+- `<string | node>` | node> accepts
+    - strings (next | prev | first | last)
+    - node
 
-### Example 1: todo
-
-todo
+### Example 1
 
 ```js
-scrollingSnapContainer.snapTo('next')
-scrollingSnapContainer.snapTo('prev')
-scrollingSnapContainer.snapTo('first')
-scrollingSnapContainer.snapTo('last')
-scrollingSnapContainer.snapTo(childNode)
+scrollSnapContainer.snapTo('x', 'next')
+scrollSnapContainer.snapTo('y', 'prev')
+scrollSnapContainer.snapTo('x', 'first')
+scrollSnapContainer.snapTo('y', 'last')
+scrollSnapContainer.snapTo('x', childNode)
 ```
 
 ## Privacy and Security Considerations
