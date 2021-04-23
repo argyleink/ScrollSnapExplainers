@@ -5,7 +5,7 @@ This document is intended as a starting point for engaging the community and sta
 problems described in this document progress along the standards-track, we will retain this document as an archive and use this section to keep the community up-to-date with the
 most current standards venue and content location of future work and discussions.
 * This document status: **Active**
-* Expected venue: [CSSWG](https://drafts.csswg.org/)
+* Expected venue: ?
 * Current version: this document
 
 ## Introduction
@@ -14,11 +14,11 @@ most current standards venue and content location of future work and discussions
 
 ## Goals
 
-To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including 2-dimensional matrix layouts and support for all document directions and writing modes.
+To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including [2-dimensional matrix layouts](https://codepen.io/argyleink/pen/MWWpOmz) and support for all document directions and writing modes.
 
 ## Use Cases
 
-Wiring up "snap to last" or "snap to the clicked item" should be trivial methods to call on a snap container:
+Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be trivial methods to call on a snap container:
 
 1. Carousels
 2. Sliders
