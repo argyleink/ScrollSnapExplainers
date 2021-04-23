@@ -14,7 +14,7 @@ most current standards venue and content location of future work and discussions
 
 ## Goals
 
-To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including 2-dimensional matrix layouts.
+To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including 2-dimensional matrix layouts and support for all document directions and writing modes.
 
 ## Use Cases
 
@@ -29,10 +29,11 @@ To empower the scroll snapping container with an API for iterating through snap 
 
 ### `snapTo(<axis>, <string | node>)`
 - `<axis>` accepts
-    - strings (x | y)
+    - strings (x | y | inline | block)
 - `<string | node>` | node> accepts
     - strings (next | prev | first | last)
     - node
+        - must be a child of the scroller and be a registered snap target
 
 ### Example 1
 
