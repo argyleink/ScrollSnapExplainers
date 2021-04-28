@@ -33,11 +33,11 @@ Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be
 
 ### `snapTo(<axis>, <string | node>)`
 - `<axis>` accepts
-    - strings (x | y | inline | block)
+    - strings (x | y | inline | block | both)
 - `<string | node>` accepts
     - strings (next | prev | first | last)
     - node
-        - must be a child of the scroller and be a registered snap target
+        - must be a child of the scroller and a registered snap child of the snapport
 
 ### Example 1
 
