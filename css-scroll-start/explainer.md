@@ -28,7 +28,7 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 <br>
 
 ## Proposed Solution
-A new CSS property on scroll containers `scroll-start` which sets the initial scroll position on initialization. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing.
+A new CSS property on scroll containers `scroll-start` which sets the initial scroll position. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing.
 
 |   |   |
 |:----------|:-------------| 
