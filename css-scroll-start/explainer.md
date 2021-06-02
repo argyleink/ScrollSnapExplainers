@@ -25,6 +25,8 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 - Galleries
 - Swipe interactions (left to archive, right to delete)
 
+<br>
+
 ## Proposed Solution
 A new CSS property on scroll containers `scroll-start` which sets the initial scroll position on initialization. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing.
 
@@ -38,7 +40,9 @@ Features:
 - Allows setting both axes start positions at the same time
 - Allows setting an element as the target for an axis
 
-### Example 1: todo
+<br>
+
+### Examples
 #### Set the start position to a snap child
 ```css
 .snap-scroll-x {
@@ -63,6 +67,8 @@ Features:
   scroll-start: 200px 400px;
 }
 ```
+
+<br>
 
 ## Privacy and Security Considerations
 
