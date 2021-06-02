@@ -16,8 +16,7 @@ Scroll experiences don't always start at the beginning! Interactions with carous
 - Post page load scroll shift mitigated
 
 ## Goals
-
-* todo
+Reduce Javascript responsibility and enable a declarative pattern for interaction models that need to start somewhere other than the beginning.
 
 ## Use Cases
 - Carousels
@@ -27,11 +26,17 @@ Scroll experiences don't always start at the beginning! Interactions with carous
 - Swipe interactions (left to archive, right to delete)
 
 ## Proposed Solution
+A new CSS property on scroll containers `scroll-start` which sets the initial scroll position on initialization. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing.
 
-Spec should:
-- Allow setting an absolute scroll value on either axis
-- Allow setting both axes start positions at the same time
-- Allow setting an element as the target
+|   |   |
+|:----------|:-------------| 
+| Name: | `scroll-start` `scroll-start-x` `scroll-start-y` |  
+| Value: | `auto` `<length-percentage>` `<element>` |  
+
+Features:
+- Allows setting an absolute scroll value on either axis
+- Allows setting both axes start positions at the same time
+- Allows setting an element as the target for an axis
 
 ### Example 1: todo
 #### Set the start position to a snap child
@@ -39,7 +44,7 @@ Spec should:
 .snap-scroll-x {
   overflow: scroll;
   scroll-snap-type: x mandatory;
-  scroll-snap-start-x: selector(.snap-scroll-x .child-2);
+  scroll-start-x: selector(.snap-scroll-x .child-hero);
 }
 ```
 
@@ -48,15 +53,14 @@ Spec should:
 :root { --nav-height: 100px }
 
 .snap-scroll-y {
-  scroll-snap-start-y: var(--nav-height);
+  scroll-start-y: var(--nav-height);
 }
 ```
 
-#### Set both with a shorthand
-x then y
+#### Set both with a shorthand (x then y)
 ```css
-.snap-scroll {
-  scroll-snap-start: 200px 400px;
+.scroll {
+  scroll-start: 200px 400px;
 }
 ```
 
