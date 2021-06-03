@@ -27,11 +27,11 @@ Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be
 5. Slides
 6. Click/tap and snap to item
 
-> Interestingly, the keyboard already has access to `next` and `previous` via the arrows, or something like it. 
+<br>
 
 ## Proposed Solution
 
-### `snapTo(<axis>, <string | node>)`
+### snapTo(`<axis>`, `<string>` or `<node>`)
 - `<axis>` accepts
     - strings (x | y | inline | block | both)
 - `<string | node>` accepts
@@ -39,15 +39,24 @@ Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be
     - node
         - must be a child of the scroller and a registered snap child of the snapport
 
-### Example 1
-
+Example usage:  
 ```js
 scrollSnapContainer.snapTo('x', 'next')
 scrollSnapContainer.snapTo('y', 'prev')
 scrollSnapContainer.snapTo('x', 'first')
 scrollSnapContainer.snapTo('y', 'last')
-scrollSnapContainer.snapTo('x', childNode)
+scrollSnapContainer.snapTo('x', scrollSnapContainer.querySelector('.child-2'))
 ```
+
+<br>
+
+### Example 1 `.snapTo('x', 'next')`
+The browser should scroll in that direction the same amount as if the `right arrow key` was pressed and perform it's routine regarding proximity and mandatory next snap target discovery.
+
+### Example 2 `.snapTo('inline', 'next')`
+If the browser is set to `rtl`, then the browser should scroll left the same amount as if the `left arrow key` was pressed and perform it's routine regarding proximity and mandatory next snap target discovery.
+
+<br>
 
 ## Privacy and Security Considerations
 
