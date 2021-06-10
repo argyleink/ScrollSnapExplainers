@@ -42,6 +42,11 @@ Features:
 
 <br>
 
+### Interactions with [fragment navigation](https://html.spec.whatwg.org/multipage/browsing-the-web.html#scroll-to-fragid)
+If the scrollport has a in-page `:target` via a URL fragment or a previous scroll position, then `scroll-start` is unused. Existing target logic should go unchanged. This makes `scroll-start` a soft request in the scroll position resolution routines. 
+
+<br>
+
 ### Examples
 #### Set the start position to a snap child
 ```css
