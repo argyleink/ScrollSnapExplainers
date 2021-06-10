@@ -1,6 +1,6 @@
 # CSS `scroll-start`
 
-## Status of this Document
+### Status of this Document
 This document is intended as a starting point for engaging the community and standards bodies in developing collaborative solutions fit for standardization. As the solutions to
 problems described in this document progress along the standards-track, we will retain this document as an archive and use this section to keep the community up-to-date with the
 most current standards venue and content location of future work and discussions.
@@ -15,10 +15,10 @@ Scroll experiences don't always start at the beginning! Interactions with carous
 - JavaScript can be removed
 - Post page load scroll shift mitigated
 
-## Goals
+### Goals
 Reduce Javascript responsibility and enable a declarative pattern for interaction models that need to start somewhere other than the beginning.
 
-## Use Cases
+### Use Cases
 - Carousels
 - Pull to refresh
 - ListViews
@@ -47,7 +47,7 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 
 <br>
 
-### Examples
+## Examples
 #### 1. Set the start position to a snap child
 ```css
 .snap-scroll-inline {
