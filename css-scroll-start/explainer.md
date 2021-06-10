@@ -32,7 +32,7 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 
 |   |   |
 |:----------|:-------------| 
-| Name: | `scroll-start` `scroll-start-x` `scroll-start-y` |  
+| Name: | `scroll-start` `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
 | Value: | `auto` `<length-percentage>` `<element>` |  
 
 Features:
@@ -48,16 +48,16 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 <br>
 
 ### Examples
-#### Set the start position to a snap child
+#### 1. Set the start position to a snap child
 ```css
-.snap-scroll-x {
-  overflow: scroll;
-  scroll-snap-type: x mandatory;
-  scroll-start-x: selector(.snap-scroll-x .child-hero);
+.snap-scroll-inline {
+  overflow-inline: scroll;
+  scroll-snap-type: inline mandatory;
+  scroll-start-x: selector(#snap-scroll-inline-hero);
 }
 ```
 
-#### Set the start position to an absolute value
+#### 2. Set the start position to an absolute value
 ```css
 :root { --nav-height: 100px }
 
@@ -66,7 +66,7 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 }
 ```
 
-#### Set both with a shorthand (x then y)
+#### 3. Set both with a shorthand (inline then block)
 ```css
 .scroll {
   scroll-start: 200px 400px;
