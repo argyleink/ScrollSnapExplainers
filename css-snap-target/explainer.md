@@ -1,6 +1,6 @@
-# CSS :snap-target pseudo class
+# CSS :snapped-inline-target & :snapped-block-target pseudo-classes
 
-## Status of this Document
+### Status of this Document
 This document is intended as a starting point for engaging the community and standards bodies in developing collaborative solutions fit for standardization. As the solutions to
 problems described in this document progress along the standards-track, we will retain this document as an archive and use this section to keep the community up-to-date with the
 most current standards venue and content location of future work and discussions.
@@ -12,24 +12,36 @@ most current standards venue and content location of future work and discussions
 
 todo
 
-## Goals
+### Goals
 
 * todo
 
-## Use Cases
+### Use Cases
 
 todo
+
+<br>
 
 ## Proposed Solution
 
-todo
+```css
+.inlineSnapScroller > .card:snapped-inline-target {
+  ...
+}
+
+.verticalSnapScroller > .card:snapped-block-target {
+  ...
+}
+```
 
 ### Example 1: todo
 
 todo
 
 ```css
-
+:snapped-inline-target {
+  --shadow-distance: 30px; /* raised size */
+}
 ```
 
 ## Privacy and Security Considerations
