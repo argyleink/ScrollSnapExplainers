@@ -18,7 +18,8 @@ todo
 
 ## Use Cases
 
-todo
+- Scroll centric selection interfaces, like a dial or carousel
+- Should only fire if user interaction has ended, and a new item has been truly rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
 
 ## Proposed Solution
 
