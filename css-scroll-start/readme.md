@@ -10,7 +10,7 @@ most current standards venue and content location of future work and discussions
 
 ## Introduction
 
-Scroll experiences don't always start at the beginning! Interactions with carousels, swipe controls, and listviews often start somewhere in the middle, and each require Javascript to set this position on page load. By enabling CSS to specify this scroll start x or y position, both users, page authors and browsers benefit:
+Scroll experiences don't always start at the beginning. Interactions with carousels, swipe controls, and listviews often start somewhere in the middle, and each require Javascript to set this position on page load. By enabling CSS to specify this scroll start x or y position, both users, page authors and browsers benefit:
 - Colocate initial scroll position with other scroll styles
 - JavaScript can be removed
 - Post page load scroll shift mitigated
@@ -21,7 +21,8 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 ### Use Cases
 - Carousels
 - Pull to refresh
-- ListViews
+- Pull to search
+- ListViews starting at a certain item or group
 - Galleries
 - Swipe interactions (left to archive, right to delete)
 
@@ -53,7 +54,7 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 .snap-scroll-inline {
   overflow-inline: scroll;
   scroll-snap-type: inline mandatory;
-  scroll-start-x: selector(#snap-scroll-inline-hero);
+  scroll-start-inline: selector(#snap-scroll-inline-hero);
 }
 ```
 
