@@ -12,7 +12,9 @@ CSS scroll snap points are often used as a mechanism to create scroll interactiv
 
 ## Goals
 
-Should only fire if user interaction has ended, and a new item has been truly rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
+Help developers sychronize a snapped scroll item with the rest of their interface elements efficiently and effectively.
+
+Should only fire if user interaction has ended and a new item has been rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
 
 ## Use Cases
 
