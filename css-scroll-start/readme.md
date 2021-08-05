@@ -36,6 +36,16 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 | Name: | `scroll-start` || `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
 | Value: | `auto` `<length-percentage>` [`<element>`](https://drafts.csswg.org/selectors-4/#typedef-id-selector) |  
 
+<br>
+
+```css
+html {
+  scroll-start-block: selector(#main);
+}
+```
+
+<br>
+
 **Features:**
 - Allows setting an absolute scroll value on either axis
 - Allows setting both axes start positions at the same time
