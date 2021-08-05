@@ -50,6 +50,8 @@ tabsSnapContainer.onsnapchanging = event = > {
 }
 ```
 
+<br>
+
 ## Privacy and Security Considerations
 
 ### Privacy
