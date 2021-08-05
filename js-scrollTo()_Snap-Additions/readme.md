@@ -16,7 +16,7 @@ Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be
 
 ### Goals
 
-To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including [2-dimensional matrix layouts](https://codepen.io/argyleink/pen/MWWpOmz) and support for all document directions and writing modes.
+To empower the scroll snapping container with an API for iterating through snap children in a reasonable way, for all snapping containers, including [2-dimensional matrix layouts](https://codepen.io/argyleink/pen/MWWpOmz) and support for all document directions and writing modes. 
 
 ### Use Cases
 
@@ -30,44 +30,49 @@ To empower the scroll snapping container with an API for iterating through snap 
 <br>
 
 ## Proposed Additions
+New values for the [`scrollToOptions`](https://developer.mozilla.org/en-US/docs/Web/API/ScrollToOptions) dictionary of the [CSSOM View](https://drafts.csswg.org/cssom-view/#dictdef-scrolltooptions). This would enable APIs like `Window.scrollTo()`, `Element.scrollBy()` and `Element.scrollIntoView()` to be aware and offer APIs to programmatic snapping.
 
-#### `scrollTo()`
-MDN https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTo
-
-#### `scrollIntoView()`
-MDN https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
-
-Currently these api's `scrollToOptions` and this proposal ([inspired by Majid](https://github.com/argyleink/ScrollSnapExplainers/discussions/6#discussioncomment-868440)) seeks to add keyword **values** to the side (top, block, left, inline) properties, to control the scroll snap aspects of the scroller specifically. 
-
-Additions:
+**New values for scrolling containers:**
 - `snap-next`
 - `snap-prev`
 - `snap-first`
 - `snap-last`
 
-Example usage:  
+**New values for scroll children:**
+- `snap-self`
+
+<br>
+
+## Examples
+
+#### 1: basic
 ```js
-// basic
 container.scrollTo({
   left: 'snap-next',
 })
+```
 
-// control animation
+#### 2: Control animation
+```js
 container.scrollTo({
-  left: 'snap-next',
+  left: 'snap-prev',
   behavior: 'smooth',
 })
+```
 
-// 2d case
+#### 3: 2D
+```js
 container.scrollTo({
   left: 'snap-first',
   top: 'snap-first',
   behavior: 'instant',
 })
+```
 
-// to a specific element
+#### 4: To a specific element
+```js
 container.querySelector('.child-2').scrollIntoView({
-  top: 'snap',
+  top: 'snap-self',
   behavior: 'smooth',
 })
 ```
