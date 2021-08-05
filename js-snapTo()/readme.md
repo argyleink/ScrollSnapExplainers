@@ -7,6 +7,7 @@ most current standards venue and content location of future work and discussions
 * This document status: **Active**
 * Expected venue: [W3C](https://www.w3.org)
 * Current version: this document
+* Alternative proposal: [`scrollToOptions` "snap" Additions](https://github.com/argyleink/ScrollSnapExplainers/tree/main/js-scrollTo()_Snap-Additions)
 
 ## Introduction
 
