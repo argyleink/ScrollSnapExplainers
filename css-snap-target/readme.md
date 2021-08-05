@@ -9,7 +9,7 @@ This document is intended as a starting point for engaging the community and sta
 
 ## Introduction
 
-User Agents privately maintain scroll snap state, leaving web developers unable to update their interfaces accordingly. 
+User Agents privately maintain scroll snap state, leaving web developers unable to update their interfaces accordingly. The proposed `snapped-*` pseudo-classes seek to be close to [`:target`](https://www.w3.org/TR/selectors-4/#the-target-pseudo) fragment navigation syntax.
 
 A scroll snap container can have any nested child snapped to either the x or y axes (or inline/block respectively). Since its 2-dimensional, a UA is likely unable to report a single snapped element for a container which is what most authors will expect. By restricting the pseudo-class to an axis, the state request is more specific and easier to fulfill.
 
