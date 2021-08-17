@@ -11,6 +11,8 @@ most current standards venue and content location of future work and discussions
 ## Introduction
 Scroll is found everywhere, from carousels to horizontal product grids that flow offscreen to virtual scrollers and cyclical scrollers. A common user experience and ask is to get rid of the "bar" that shows the scroll, and replace it with another kind of scroll indicator (like dots). Scrolling is not always tied to a bar, and combined with snap points, a marker feature is especially useful.
 
+![Scroll bar vs. scroll markers](https://developer-chrome-com.imgix.net/image/HodOHWjMnbNw56hvNASHWSgZyAf2/0gNU49FcXulOlQ3q5Voe.png)
+
 ### Goals
 Reduce Javascript responsibility and enable a declarative pattern for styling scroll/snap points that doesn't rely on a bar.
 
