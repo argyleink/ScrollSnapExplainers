@@ -1,6 +1,8 @@
 # JS `snapTo()`
 
 ### Status of this Document
+Closed. The [adding options](https://github.com/argyleink/ScrollSnapExplainers/tree/main/js-scrollToOptions_Snap-Additions) to `scrollTo()` is being persued instead.
+
 This document is intended as a starting point for engaging the community and standards bodies in developing collaborative solutions fit for standardization. As the solutions to
 problems described in this document progress along the standards-track, we will retain this document as an archive and use this section to keep the community up-to-date with the
 most current standards venue and content location of future work and discussions.
