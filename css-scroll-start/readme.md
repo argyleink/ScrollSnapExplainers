@@ -29,27 +29,19 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 <br>
 
 ## Proposed Solution
-A new CSS property on scroll containers `scroll-start` which sets the initial scroll position. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing.
+A new CSS property on scroll containers `scroll-start` which sets the initial scroll position. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing. For example, an instable layout that shifts after page load, can disrupt `scroll-start` by causing a scroll position update. 
 
 |   |   |
 |:----------|:-------------| 
-| Name: | `scroll-start` || `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
+| Name: | `scroll-start` or `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
 | Value: | `auto` `<length-percentage>` [`<element>`](https://drafts.csswg.org/selectors-4/#typedef-id-selector) |  
-
-<br>
-
-```css
-html {
-  scroll-start-block: selector(#main);
-}
-```
 
 <br>
 
 **Features:**
 - Allows setting an absolute scroll value on either axis
 - Allows setting both axes start positions at the same time
-- Allows setting an element as the target for an axis (nice to have)
+- Allows setting an element as the target for an axis
 
 <br>
 
@@ -81,6 +73,14 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 ```css
 .scroll {
   scroll-start: 200px 400px;
+}
+```
+
+#### 4. `<main id="main">` element will be already scrolled to, without requiring a URL hash
+
+```css
+html {
+  scroll-start-block: selector(#main);
 }
 ```
 
