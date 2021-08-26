@@ -40,14 +40,14 @@ Reduce Javascript responsibility and enable a declarative pattern for updating i
 
 |   |   |
 |:----------|:-------------| 
-| Name: | `:snapped` or `:snapped-block-target` `:snapped-y-target` `:snapped-inline-target` `:snapped-x-target` |   
+| Name: | `:snapped-target` or `:snapped-block-target` `:snapped-y-target` `:snapped-inline-target` `:snapped-x-target` |   
 
 <br>
 
 The loose example, estimated to be the most commonly used, will match all scroll snap targets, regardless of axis. Assuming folks aren't overlapping scroll snap children, this should be quite reliable.
 
 ```css
-:snapped {
+:snapped-target {
   outline: hotpink;
 }
 ```
@@ -63,7 +63,7 @@ The loose example, estimated to be the most commonly used, will match all scroll
 #### 1: Lifted card snap child
 
 ```css
-.card:snapped {
+.card:snapped-target {
   --shadow-distance: 30px; /* raised size */
 }
 ```
