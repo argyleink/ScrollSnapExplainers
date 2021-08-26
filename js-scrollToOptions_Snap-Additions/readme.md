@@ -12,7 +12,7 @@ most current standards venue and content location of future work and discussions
 
 [Scroll snap points](https://www.w3.org/TR/css-scroll-snap-1/) are an important and powerful CSS feature. They enable the creation of pointer agnostic stepped scroll experiences, and do so very succinctly. The problem is, they're often used alongside adjacent elements which need to represent this stepped state of scroll, aka the user needs a way to see the state of the snap. Developers today write Javascript observers or create custom functions to monitor and drive this state. 
 
-Wiring up "snap to next", "snap to last" or "snap to the clicked item" should be trivial methods to call on a snap container.
+Wiring up "snap to next", "snap to last" or "snap to the clicked item" **should be trivial methods to call on a snap container**.
 
 ### Goals
 
@@ -30,16 +30,28 @@ To empower the scroll snapping container with an API for iterating through snap 
 <br>
 
 ## Proposed Additions
-New values for the [`scrollToOptions`](https://developer.mozilla.org/en-US/docs/Web/API/ScrollToOptions) dictionary of the [CSSOM View](https://drafts.csswg.org/cssom-view/#dictdef-scrolltooptions). This would enable APIs like `Window.scrollTo()`, `Element.scrollBy()` and `Element.scrollIntoView()` to be aware and offer APIs to programmatic snapping.
+New values for the [`scrollToOptions`](https://developer.mozilla.org/en-US/docs/Web/API/ScrollToOptions) and [`scrollIntoViewOptions`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) of the [CSSOM View](https://drafts.csswg.org/cssom-view/#dictdef-scrolltooptions). This would enable APIs like `Window.scrollTo()`, `Element.scrollBy()` and `Element.scrollIntoView()` to be aware and offer APIs for programmatic snapping. 
 
-**New values for scrolling containers:**
-- `snap-next`
-- `snap-prev`
-- `snap-first`
-- `snap-last`
+<br>
 
-**New values for scroll children:**
-- `snap-self`
+**New values for scrollToOptions `left` and `top` properties:**
+- `snap-next`  
+Depending on the axis, the UA is to scroll towards "end" to the next valid snap target. If the next snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no next snap target, as in the current snap target is the last valid target, the UA is to scroll back to the beginning, aka `snap-first`. This is cyclic.
+
+- `snap-previous`  
+Depending on the axis, the UA is to scroll towards "start" to the previous valid snap target. If the previous snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no previous snap target, as in the current snap target is the 1st valid target, the UA is to scroll to the end, aka `snap-last`.
+
+- `snap-first`  
+Depending on the axis, the UA is to scroll to the snap target closest to scroll position 0. 
+
+- `snap-last`  
+Depending on the axis, the UA is to scroll to the snap target closest to scroll end. 
+
+<br>
+
+**New values for scrollIntoViewOptions `block` and `inline` properties:**
+- `snap-self`  
+Depending on the axis, the UA is to scroll to and snap the contextual element. Snap positioning is determined by CSS
 
 <br>
 
@@ -69,11 +81,14 @@ container.scrollTo({
 })
 ```
 
-#### 4: To a specific element
+#### 4: To a tapped element
 ```js
-container.querySelector('.child-2').scrollIntoView({
-  top: 'snap-self',
-  behavior: 'smooth',
+container.addEventListener('click', event => {
+  event.target.scrollIntoView({
+    left: 'snap-self',
+    top: 'snap-self',
+    behavior: 'smooth',
+  })
 })
 ```
 
