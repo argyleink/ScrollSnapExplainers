@@ -9,9 +9,11 @@ This document is intended as a starting point for engaging the community and sta
 
 ## Introduction
 
-User Agents privately maintain scroll snap state, leaving web developers unable to update their interfaces accordingly. The proposed `snapped-*` pseudo-classes seek to be close to [`:target`](https://www.w3.org/TR/selectors-4/#the-target-pseudo) fragment navigation syntax.
+User Agents privately maintain scroll snap state, leaving web developers unable to update complimentary interfaces accordingly. Scroll snapping is often used for "picker UX", [made popular by iOS](https://miro.medium.com/max/700/1*LJujvSAe2lGVdY2ETmg5ew.png). The proposed `snapped-*` pseudo-classes seek to be close to [`:target`](https://www.w3.org/TR/selectors-4/#the-target-pseudo) fragment navigation syntax. 
 
 A scroll snap container can have any nested child snapped to either the x or y axes (or inline/block respectively). Since its 2-dimensional, a UA is likely unable to report a single snapped element for a container which is what most authors will expect. Adding axes to the pseudo-class makes the request more specific and able to fulfill 2D scenarios. It will be possible for multiple elements to match this selector.
+
+The timing should synchronize with the same frame the UA has decided on a new snap child. Sooner is better than later, but UA's can decide.
 
 ### Common Gotcha
 Depending on the scroll snap styles, some (many) snap children may never become snapped. This is a recurring UX and API question, as a scroll gesture may be limited or at the end, and the desired snap target cannot be brought to the snap axis alignment area. 
