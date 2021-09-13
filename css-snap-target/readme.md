@@ -14,9 +14,9 @@ User Agents privately maintain scroll snap state, leaving web developers unable 
 ![Screen Shot 2021-09-13 at 1 09 52 PM](https://user-images.githubusercontent.com/1134620/133149663-b3cd3f6e-7541-4cc0-a325-7fe7ade2e4cb.png)
 
 
-A scroll snap container can have any nested child snapped to either the x or y axes (or inline/block respectively). Since its 2-dimensional, a UA is likely unable to report a single snapped element for a container which is what most authors will expect. Adding axes to the pseudo-class makes the request more specific and able to fulfill 2D scenarios. It will be possible for multiple elements to match this selector. It will be possible for many elements to never match the `:snapped` selector.
+A scroll snap container can have any nested child snapped to either the x or y axes (or inline/block respectively). In a 2-dimensional snapping layout, a UA may match 2 separate elements with `:snapped`. Adding axes to the pseudo-class makes the selector more specific, as to match design or developer intent. 
 
-The match timing should synchronize with the same frame the UA has decided on a new snap child. Sooner is better than later, but UA's can decide.
+The selector matching timing should synchronize with the same frame the UA has decided on a new snap child. Sooner is better than later, but UA's can decide.
 
 ### Common Gotcha
 Depending on the scroll snap styles, some (many) snap children may never become snapped. This is a recurring UX and API question, as a scroll gesture may be limited or at the end, and the desired snap target cannot be brought to the snap axis alignment area. 
