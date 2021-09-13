@@ -11,6 +11,9 @@ This document is intended as a starting point for engaging the community and sta
 
 User Agents privately maintain scroll snap state, leaving web developers unable to update complimentary interfaces accordingly. Scroll snapping is often used for "picker UX", [made popular by iOS](https://miro.medium.com/max/700/1*LJujvSAe2lGVdY2ETmg5ew.png).  
 
+![Screen Shot 2021-09-13 at 1 09 52 PM](https://user-images.githubusercontent.com/1134620/133149663-b3cd3f6e-7541-4cc0-a325-7fe7ade2e4cb.png)
+
+
 A scroll snap container can have any nested child snapped to either the x or y axes (or inline/block respectively). Since its 2-dimensional, a UA is likely unable to report a single snapped element for a container which is what most authors will expect. Adding axes to the pseudo-class makes the request more specific and able to fulfill 2D scenarios. It will be possible for multiple elements to match this selector. It will be possible for many elements to never match the `:snapped` selector.
 
 The match timing should synchronize with the same frame the UA has decided on a new snap child. Sooner is better than later, but UA's can decide.
@@ -22,7 +25,7 @@ Take the following example, where figure elements want to align to `start` but t
 
 ![Screen Shot 2021-08-26 at 2 29 18 PM](https://user-images.githubusercontent.com/1134620/131038651-8adfd69d-806b-4915-ba6e-827cde2054f5.png)
 
-Unless!  
+**Unless!**  
 Styles are added so the user can scroll to the last item, aka enough padding in the container so items at the end can align on the axis:
 
 ![Screen Shot 2021-08-26 at 2 32 49 PM](https://user-images.githubusercontent.com/1134620/131039093-38946e38-a664-4fa0-a9da-f0222cf7b423.png)
@@ -73,7 +76,7 @@ The loose example, estimated to be the most commonly used, will match all scroll
 ### 2: Accessible outline on snap child
 
 ```css
-:snapped-x {
+:snapped-inline {
   outline: 3px solid hotpink;
 }
 ```
