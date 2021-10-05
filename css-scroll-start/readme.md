@@ -42,6 +42,7 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 - Allows setting an absolute scroll value on either axis
 - Allows setting both axes start positions at the same time
 - Allows setting an element as the target for an axis
+- Persistant after layout
 
 <br>
 
