@@ -36,10 +36,10 @@ New values for the [`scrollToOptions`](https://developer.mozilla.org/en-US/docs/
 
 **New values for scrollToOptions `left` and `top` properties:**
 - `snap-next`  
-Depending on the axis, the UA is to scroll towards "end" to the next valid snap target. If the next snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no next snap target, as in the current snap target is the last valid target, the UA is to scroll back to the beginning, aka `snap-first`. This is cyclic.
+Depending on the axis, the UA is to scroll towards "end" to the next valid snap target. If the next snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no next snap target, as in the current snap target is the last valid target, the UA is to look at the `cyclic` property to see if it should scroll back to the beginning, aka `snap-first`, or do nothing. 
 
 - `snap-previous`  
-Depending on the axis, the UA is to scroll towards "start" to the previous valid snap target. If the previous snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no previous snap target, as in the current snap target is the 1st valid target, the UA is to scroll to the end, aka `snap-last`.
+Depending on the axis, the UA is to scroll towards "start" to the previous valid snap target. If the previous snap target is at the same scroll position as the current snap target, no scrolling needs to occur but the internal snapped target should update. If there is no previous snap target, as in the current snap target is the 1st valid target, the UA is to look at the `cyclic` property to see if it should scroll to the end, aka `snap-last`, or do nothing. 
 
 - `snap-first`  
 Depending on the axis, the UA is to scroll to the snap target closest to scroll position 0. 
