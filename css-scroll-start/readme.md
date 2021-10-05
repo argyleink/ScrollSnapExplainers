@@ -48,6 +48,9 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 ### Interactions with [fragment navigation](https://html.spec.whatwg.org/multipage/browsing-the-web.html#scroll-to-fragid)
 If the scrollport has a in-page `:target` via a URL fragment or a previous scroll position, then `scroll-start` is unused. Existing target logic should go unchanged. This makes `scroll-start` a soft request in the scroll position resolution routines. 
 
+### Interactions with `scrollTo()` options
+Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnapExplainers/tree/main/js-scrollToOptions_Snap-Additions), `scroll-start` should be a valid scroll target. For example, the following `scrollTo({top: 'scroll-start'})` scrolls the container to the value specified in the property.
+
 <br>
 
 ## Examples
