@@ -29,12 +29,17 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 <br>
 
 ## Proposed Solution
-A new CSS property on scroll containers `scroll-start` which sets the initial scroll position. Once the user has interacted with the scroll area, `scroll-start` has no effect. The style must be present during scrollport creation or it has otherwised missed it's timing. For example, an instable layout that shifts after page load, can disrupt `scroll-start` by causing a scroll position update. 
+A new CSS property on scroll containers `scroll-start` which sets the initial scroll position and a CSS property on scroll container children `scroll-start-target`. Once the user has interacted with the scroll area, `scroll-start` and `scroll-start-target` has no effect. The styles must be present during scrollport creation or they have otherwise missed their timing. For example, an instable layout that shifts after page load, can disrupt `scroll-start` by causing a scroll position update. 
 
 |   |   |
 |:----------|:-------------| 
 | Name: | `scroll-start` or `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
-| Value: | `auto` `<length-percentage>` [`<element>`](https://drafts.csswg.org/selectors-4/#typedef-id-selector) |  
+| Value: | `auto` `<length-percentage>` |  
+
+|   |   |
+|:----------|:-------------| 
+| Name: | `scroll-start-target` or `scroll-start-target-x` `scroll-start-target-y` `scroll-start-target-inline` `scroll-start-target-block` |  
+| Value: | `auto` `none` (default) |  
 
 <br>
 
@@ -83,8 +88,8 @@ Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnap
 #### 4. `<main id="main">` element will be already scrolled to, without requiring a URL hash
 
 ```css
-html {
-  scroll-start-block: selector(#main);
+html > main {
+  scroll-start-target-block: auto;
 }
 ```
 
