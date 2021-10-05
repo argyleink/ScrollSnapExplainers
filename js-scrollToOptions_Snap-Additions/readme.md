@@ -61,6 +61,7 @@ Depending on the axis, the UA is to scroll to and snap the contextual element. S
 ```js
 container.scrollTo({
   left: 'snap-next',
+  cyclic: true,
 })
 ```
 
