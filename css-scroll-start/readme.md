@@ -87,7 +87,7 @@ Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnap
 }
 ```
 
-#### 4. `<main id="main">` element will be already scrolled to, without requiring a URL hash
+#### 4. `<main>` element will be already scrolled to, without requiring a URL hash
 
 ```css
 html > main {
