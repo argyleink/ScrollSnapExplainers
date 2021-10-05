@@ -65,7 +65,9 @@ Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnap
 .snap-scroll-inline {
   overflow-inline: scroll;
   scroll-snap-type: inline mandatory;
-  scroll-start-inline: selector(#snap-scroll-inline-hero);
+}
+.snap-scroll-inline > #snap-start {
+  scroll-start-target-inline: auto;
 }
 ```
 
