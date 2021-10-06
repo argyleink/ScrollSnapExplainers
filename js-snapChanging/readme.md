@@ -14,7 +14,7 @@ CSS scroll snap points are often used as a mechanism to create scroll interactiv
 
 Help developers sychronize a snapped scroll item with the rest of their interface elements efficiently and effectively.
 
-Should only fire if user interaction has ended, and a new item has been truly rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
+<br>
 
 ## Use Cases
 
@@ -30,6 +30,41 @@ Scroll centric selection:
 
 A new javascript event for scroll snap container elements called `snapchanging`
 
+- Should only fire if user interaction has ended, and a new item has been truly rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
+
+<br>
+
+**Type**: snapchanging (heavily inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
+**Interface**: SnapEvent  
+**Sync / Async**: Async  
+**Bubbles**: Yes  
+**Trusted Targets**: Element  
+**Cancelable**: No  
+**Composed**: Yes  
+**Default action**: None  
+**Context (trusted events):** 
+
+<br>
+
+- `Event.target`: scroll container the event target is in
+- `SnapEvent.snappedList`: an object with 2 keys for each axis, each key returns an array of snapped targets
+- `SnapEvent.snappedTargetsList`: an object with 2 keys for each axis, each key returns an array of the aggregated snap children
+- `SnapEvent.invokedProgrammatically`: a boolean informing developers if a user or script invoked scroll that caused `snapchanged`
+- `SnapEvent.smoothlyScrolled`: a boolean informing developers if the snap change was instant or interpolated
+
+<br>
+
+```
+interface SnapEvent {
+  readonly attribute EventTarget scrollContainer;
+
+  readonly attribute SnapEvent Object snappedList{inline: Element, block: Element};
+  readonly attribute SnapEvent Object snappedTargetsList{inline:[], block:[]};
+  readonly attribute SnapEvent Bool invokedProgrammatically;
+  readonly attribute SnapEvent Bool smoothlyScrolled;
+};
+```
+
 <br>
 
 ## Examples
@@ -38,7 +73,7 @@ A new javascript event for scroll snap container elements called `snapchanging`
 
 ```js
 carouselSnapContainer.addEventListener('snapchanging', event => {
-  console.info(event)
+  console.info(event.invokedProgrammatically)
 })
 ```
 
@@ -46,7 +81,8 @@ carouselSnapContainer.addEventListener('snapchanging', event => {
 
 ```js
 tabsSnapContainer.onsnapchanging = event = > {
-  console.info(event)
+  let inlineSnapTarget = event.snappedList.inline
+  console.info(inlineSnapTarget)
 }
 ```
 
