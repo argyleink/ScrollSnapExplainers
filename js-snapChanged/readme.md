@@ -8,7 +8,7 @@ This document is intended as a starting point for engaging the community and sta
 
 ## Introduction
 
-CSS scroll snap points are often used as a mechanism to create scroll interactive "selection" components, where selection is determined with javascript with intersection observers and a scroll end guestimate. By creating a built-in event, the invisible state will become actionable, at the right time, and always correct.
+CSS scroll snap points are often used as a mechanism to create scroll interactive "selection" components, where selection is determined with javascript intersection observers and a scroll end guestimate. By creating a built-in event, the invisible state will become actionable, at the right time, and always correct.
 
 ## Goals
 
@@ -59,7 +59,7 @@ A new event for scroll snap containers called `snapchanged`. The event is dispat
 interface SnapEvent {
   readonly attribute EventTarget scrollContainer;
 
-  readonly attribute SnapEvent Object snappedList{inline:[], block:[]};
+  readonly attribute SnapEvent Object snappedList{inline: Element, block: Element};
   readonly attribute SnapEvent Object snappedTargetsList{inline:[], block:[]};
   readonly attribute SnapEvent Bool invokedProgrammatically;
   readonly attribute SnapEvent Bool smoothlyScrolled;
@@ -82,8 +82,8 @@ carouselSnapContainer.addEventListener('snapchanged', event => {
 
 ```js
 tabsSnapContainer.onsnapchanged = event = > {
-  let [assumedSingleInlineSnapTarget] = event.snappedList.inline
-  console.info(assumedSingleInlineSnapTarget)
+  let inlineSnapTarget = event.snappedList.inline
+  console.info(inlineSnapTarget)
 }
 ```
 
