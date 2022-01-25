@@ -13,7 +13,9 @@ User Agents privately maintain scroll snap state, leaving web developers unable 
 
 ![Screen Shot 2021-09-13 at 1 09 52 PM](https://user-images.githubusercontent.com/1134620/133149663-b3cd3f6e-7541-4cc0-a325-7fe7ade2e4cb.png)
 
-A scroll snap container can have any nested child (just one) snapped to either the x or y axes (or inline/block respectively). In a 2-dimensional snapping layout, a UA may match 2 separate elements with `:snapped`. Adding axes to the pseudo-class makes the selector more specific, as to match design or developer intent. 
+A scroll snap container can have any nested child (**just one**) snapped to either the x or y axes (or inline/block respectively). In a 2-dimensional snapping layout, a UA may match 2 separate elements with `:snapped`. Adding axes to the pseudo-class makes the selector more specific, as to match design or developer intent. 
+
+In the case where more than 1 element appear snapped or are snapped on an axis, the 1st of the DOM order is the `:snapped` child. An exception is if a child is snapped on the cross axis, in which case it should be `:snapped` even if it's not the 1st of the DOM order.
 
 The selector matching timing should synchronize with the same frame the UA has decided on a new snap child. Sooner is better than later, but UA's can decide.
 
