@@ -92,6 +92,14 @@ section:snapped-y > header {
 
 <br>
 
+## Cyclical concerns, like with `:hover`
+
+We ([Robert Flack](https://github.com/flackr), [Tab Atkins](https://github.com/tabatkins) and [Adam Argyle](https://github.com/argyleink/)) believe the value of adding this feature exceeds the implementation difficulties. The lengths at which people go to try and derive the snapped child are never 100% effective and require complex JavaScript algorithms.
+
+We are OK letting `:snapped` cycle like `:hover`, as long as it's only once per lifecycle update. We believe developers will be responsible with this, as they have with `:hover`.
+
+<br>
+
 ## Privacy and Security Considerations
 
 ### Privacy
