@@ -34,7 +34,7 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 |   |   |
 |:----------|:-------------| 
 | Name: | `scroll-start` or `scroll-start-x` `scroll-start-y` `scroll-start-inline` `scroll-start-block` |  
-| Value: | `auto` `<length-percentage>` |  
+| Value: | `auto` `<length-percentage>` `start` (default) `end` `center` |  
 
 > Shorthands do not autoexpand like `scroll-start: 200px` is not `scroll-start: 200px 200px`, it's `scroll-start: 200px 0`
 
