@@ -21,6 +21,13 @@ The selector matching timing should synchronize with the same frame the UA has d
 
 > A [gallery of scroll snap interactions](https://snap-gallery.netlify.app/) can help illuminate the CSS UI need, here's [the source](https://github.com/argyleink/snapping-gallery). Specifically see the `:snapped` demo's for an attempt at deriving the snapped element.
 
+### Preventing infinite or expensive browser loops
+Like `:hover`, a developer may find they have caused a loop by changing a property on the snapped item that causes it to unsnap, then potentially snap again. This type of behavior is a concern mentioned by the CSSWG in [selectors that depend on layout](https://wiki.csswg.org/faq#selectors-that-depend-on-layout) and is top of mind here in this feature. 
+
+This can be mitigated by limiting the loops to a single frame, just like hover. This avoids "tight loops" that could cause major browser problems, it instead is a loose loop which hover has proved for 20 years can be mitigated and avoided through diligence. It's understood there's a challenge here, and the enablement via CSS will pacify all the much worse JavaScript solutions folks attempt today. Hover is a cherished and respected property that has proven to not be as destructive than anticipated.
+
+Worth considering too, only evaluating selectors with `:snapped` if the containing scrollport is actually scrolling. If no scrolling is happening, the selectors won't continue firing. Consider it like the `:hover` hit test, rather a scroll test. The user, or programmatic scroll from JS, are events that will trigger the selector evaluation, not a constant frame by frame evaluation.
+
 ### Common Gotcha
 Depending on the scroll snap styles, some (many) snap children may never become snapped. This is a recurring UX and API question, as a scroll gesture may be limited or at the end, and the desired snap target cannot be brought to the snap axis alignment area. 
 
