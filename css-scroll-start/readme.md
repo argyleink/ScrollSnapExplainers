@@ -59,6 +59,15 @@ If the scrollport has a in-page `:target` via a URL fragment or a previous scrol
 ### Interactions with `scrollTo()` options
 Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnapExplainers/tree/main/js-scrollToOptions_Snap-Additions), `scroll-start` should be a valid scroll target. For example, the following `scrollTo({top: 'scroll-start'})` scrolls the container to the value specified in the property.
 
+### Interactions with a snap container with only 1 snap child
+This effectively will layout and start scroll at the snapped child, thus negating / cancelling this styles effect. `scroll-start` will only work if nothing else has effected the scroll position.
+
+### How to resolve multiple `scroll-start-target`'s
+The first in the DOM order will be chosen
+
+### How to resolve `scroll-start` and `scroll-start-target` if both used
+The target child will be used instead of the lengths in `scroll-start`
+
 <br>
 
 ## Examples
