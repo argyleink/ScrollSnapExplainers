@@ -29,7 +29,7 @@ Reduce Javascript responsibility and enable a declarative pattern for interactio
 <br>
 
 ## Proposed Solution
-A new CSS property on scroll containers `scroll-start` which sets the initial scroll position and a CSS property on scroll container children `scroll-start-target`. Once the user has interacted with the scroll area, `scroll-start` and `scroll-start-target` has no effect. The styles must be present during scrollport creation or they have otherwise missed their timing. For example, an instable layout that shifts after page load, can disrupt `scroll-start` by causing a scroll position update. 
+A new CSS property on scroll containers `scroll-start` which sets the initial scroll position and a CSS property on scroll container children `scroll-start-target`. Once the user has interacted with the scroll area, `scroll-start` and `scroll-start-target` has no effect. The styles must be present during [first layout](#first-layout) or they have otherwise missed their timing. For example, an instable layout that shifts after page load, can disrupt `scroll-start` by causing a scroll position update. 
 
 |   |   |
 |:----------|:-------------| 
@@ -53,6 +53,9 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 
 <br>
 
+### Interactions with scroll padding and margin
+These should all apply just like when a snap child is positioned.
+
 ### Interactions with [fragment navigation](https://html.spec.whatwg.org/multipage/browsing-the-web.html#scroll-to-fragid)
 If the scrollport has a in-page `:target` via a URL fragment or a previous scroll position, then `scroll-start` is unused. Existing target logic should go unchanged. This makes `scroll-start` a soft request in the scroll position resolution routines. 
 
@@ -63,10 +66,28 @@ Similar to the additions [proposed here](https://github.com/argyleink/ScrollSnap
 This effectively will layout and start scroll at the snapped child, thus negating / cancelling this styles effect. `scroll-start` will only work if nothing else has effected the scroll position.
 
 ### How to resolve multiple `scroll-start-target`'s
-The first in the DOM order will be chosen
+The first in the DOM order will be chosen.
 
 ### How to resolve `scroll-start` and `scroll-start-target` if both used
-The target child will be used instead of the lengths in `scroll-start`
+The target child will be used instead of the lengths in `scroll-start`.
+
+### What happens if display is toggled?
+Same behavior that animations follow with [first layout](#first-layout).
+
+### Scroller inside a scroller?
+Should follow patterns that scroll snap has laid down.
+
+### RTL/LTR
+Logical properties are offered for length offsets that should be flow relative. Furthermore, the `end` and `start` keywords are always logical.
+
+### Interactions with `place-content`
+TODO
+
+### What happens if the element moves around or the scroller gets resized?
+Just like scroll-snap, the scroll-start position should track with the scroller, performing relayout and assigning the scroll-start position. Note, if the user has interacted with the scroller at all before resize or movement, the start position does not track along anymore.
+
+### What happens if the position is beyond the scroll area?
+The `scroll-start` position is clamped to the scrollport minimums and maximums. 
 
 <br>
 
@@ -105,6 +126,13 @@ html > main {
   scroll-start-target-block: auto;
 }
 ```
+
+<br>
+
+## Terminology
+
+#### First Layout
+This event should follow the Animation code path. When animation objects are created and fire events, this is when a box has it's first layout.
 
 <br>
 
