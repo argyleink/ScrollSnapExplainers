@@ -53,6 +53,7 @@ A new CSS property on scroll containers `scroll-start` which sets the initial sc
 
 <br>
 
+## FAQ / Questions / Exceptions
 ### Interactions with scroll padding and margin
 These should all apply just like when a snap child is positioned.
 
