@@ -30,7 +30,7 @@ Scroll centric selection:
 
 A new javascript event for scroll snap container elements called `snapchanging`
 
-- Should only fire if user interaction has ended, and a new item has been truly rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
+- Should fire every time, and as soon as, the UA has determined a new snap child.  
 
 <br>
 
