@@ -28,18 +28,18 @@ Scroll centric selection:
 
 ## Proposed Solution
 
-A new event for scroll snap containers called `snapchanged`. The event is dispatched when a new snap target has been snapped to, providing what caused it. 
+A new event for scroll snap containers called `snapchanged`. The event is dispatched when a new snap target has been snapped to.
 
 - Should dispatch if user scroll interaction has ended and a new item has been rested on. If a user is still touching the screen or the touchpad, this event should not fire, even if the scroll position is exactly at a snapped elements position. 
 - Should dispatch if animations or transitions change the snapped style of the container or children, IF they have in fact changed the snap target.
 
 <br>
 
-**Type**: snapchanged (heavily inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
+**Type**: snapchanged (inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
 **Interface**: SnapEvent  
 **Sync / Async**: Async  
-**Bubbles**: Yes  
-**Trusted Targets**: Element  
+**Bubbles**: No  
+**Trusted Targets**: Element, Document  
 **Cancelable**: No  
 **Composed**: Yes  
 **Default action**: None  
@@ -48,21 +48,16 @@ A new event for scroll snap containers called `snapchanged`. The event is dispat
 <br>
 
 - `Event.target`: scroll container the event target is in
-- `SnapEvent.snappedList`: an object with 2 keys for each axis, each key returns an array of snapped targets
-- `SnapEvent.snappedTargetsList`: an object with 2 keys for each axis, each key returns an array of the aggregated snap children
-- `SnapEvent.invokedProgrammatically`: a boolean informing developers if a user or script invoked scroll that caused `snapchanged`
-- `SnapEvent.smoothlyScrolled`: a boolean informing developers if the snap change was instant or interpolated
-
+- `SnapEvent.snappedTargetBlock`: element which has been newly snapped to in the block axis.
+- `SnapEvent.snappedTargetInline`: element which has been newly snapped to in the inline axis.
 <br>
 
 ```
 interface SnapEvent {
-  readonly attribute EventTarget scrollContainer;
+  readonly attribute EventTarget target;
 
-  readonly attribute SnapEvent Object snappedList{inline: Element, block: Element};
-  readonly attribute SnapEvent Object snappedTargetsList{inline:[], block:[]};
-  readonly attribute SnapEvent Bool invokedProgrammatically;
-  readonly attribute SnapEvent Bool smoothlyScrolled;
+  readonly attribute Node? snappedTargetBlock;
+  readonly attribute Node? snappedTargetInline;
 };
 ```
 
@@ -74,7 +69,7 @@ interface SnapEvent {
 
 ```js
 carouselSnapContainer.addEventListener('snapchanged', event => {
-  console.info(event.invokedProgrammatically)
+  console.info(`did snap to ${event.snapTargetBlock.id}`);
 })
 ```
 
@@ -82,8 +77,7 @@ carouselSnapContainer.addEventListener('snapchanged', event => {
 
 ```js
 tabsSnapContainer.onsnapchanged = event = > {
-  let inlineSnapTarget = event.snappedList.inline
-  console.info(inlineSnapTarget)
+  console.info(`did snap to ${event.snapTargetInline.id}`);
 }
 ```
 
