@@ -30,15 +30,15 @@ Scroll centric selection:
 
 A new javascript event for scroll snap container elements called `snapchanging`
 
-- Should fire every time, and as soon as, the UA has determined a new snap child.  
+- Should fire every time, and as soon as, the UA has determined a new snap child during ongoing scroll operation.  
 
 <br>
 
-**Type**: snapchanging (heavily inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
+**Type**: snapchanging (inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
 **Interface**: SnapEvent  
 **Sync / Async**: Async  
-**Bubbles**: Yes  
-**Trusted Targets**: Element  
+**Bubbles**: No  
+**Trusted Targets**: Element, Document
 **Cancelable**: No  
 **Composed**: Yes  
 **Default action**: None  
@@ -54,14 +54,17 @@ A new javascript event for scroll snap container elements called `snapchanging`
 
 <br>
 
+- `Event.target`: scroll container the event target is in
+- `SnapEvent.snappedTargetBlock`: element which has been newly selected to be snapped to in the block axis.
+- `SnapEvent.snappedTargetInline`: element which has been newly selected to be snapped to in the inline axis.
+<br>
+
 ```
 interface SnapEvent {
-  readonly attribute EventTarget scrollContainer;
+  readonly attribute EventTarget target;
 
-  readonly attribute SnapEvent Object snappedList{inline: Element, block: Element};
-  readonly attribute SnapEvent Object snappedTargetsList{inline:[], block:[]};
-  readonly attribute SnapEvent Bool invokedProgrammatically;
-  readonly attribute SnapEvent Bool smoothlyScrolled;
+  readonly attribute Node? snappedTargetBlock;
+  readonly attribute Node? snappedTargetInline;
 };
 ```
 
@@ -73,7 +76,7 @@ interface SnapEvent {
 
 ```js
 carouselSnapContainer.addEventListener('snapchanging', event => {
-  console.info(event.invokedProgrammatically)
+  console.info(`will snap to ${event.snapTargetBlock.id}`);
 })
 ```
 
@@ -81,8 +84,7 @@ carouselSnapContainer.addEventListener('snapchanging', event => {
 
 ```js
 tabsSnapContainer.onsnapchanging = event = > {
-  let inlineSnapTarget = event.snappedList.inline
-  console.info(inlineSnapTarget)
+  console.info(`will snap to ${event.snapTargetInline.id}`);
 }
 ```
 
