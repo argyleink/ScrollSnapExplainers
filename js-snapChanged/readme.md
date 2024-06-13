@@ -87,71 +87,106 @@ snap areas of the carousel and try to identify which element is snapped to based
 on the current layout and style of the page, so they might write something like:
 
 ```
-// Determine if a snap container |container| is aligned to an element |target|
-// in the x axis.
-function isSnapAligned(container, target) {
-  const containerBoundingRect = container.getBoundingClientRect();
-  const scrollLeft = container.scrollLeft;
-
-  const targetStyle = getComputedStyle(target);
-  const alignment = target.style.scrollSnapAlign;
-  const targetBoundingRect = target.getBoundingClientRect();
-  const scrollMargin = parseInt(targetStyle.scrollMarginLeft);
+// Get the offset, relative to the viewport, at which |area|'s left edge needs
+// to be in order to be snap-aligned to |container|.
+function GetAlignedOffset(container, area) {
+  const areaStyle = getComputedStyle(area);
+  const alignment = areaStyle.scrollSnapAlign;
+  const scrollMargin = parseInt(areaStyle.scrollMargin);
+  const containerOffsetLeft = container.offsetLeft;
 
   let alignedOffset;
   if (alignment === "start") {
-    alignedOffset = boundingRect.x - scrollMargin;
+    alignedOffset = containerOffsetLeft;
   } else if (alignment === "center") {
-    alignedOffset = boundingRect.x + boundingRect.width / 2
-      - containerBoundingRect.width / 2 - scrollMargin;
-  } else { // end alignment
-    alignedOffset = boundingRect.x + boundingRect.width
-      - containerBoundingRect.width - scrollMargin;
+    alignedOffset = containerOffsetLeft + container.clientWidth / 2 - area.clientWidth / 2;
+  } else { // "end" alignment
+    alignedOffset = containerOffsetLeft + container.clientWidth - area.clientWidth;
   }
 
-  // Other cases a developer's code must handle include
-  // - where the snap position doesn't exactly match the aligned position due
-  //   to being at the extremes of the scroll container
-  // - cases where the browser has selected a snap target based on its
-  //   being larger than the scrollport rather being aligned to the scroll
-  //   position.
-  return scrollLeft === alignedOffset;
+  return alignedOffset + scrollMargin;
 }
 
-// Get the element which a snap container |container| is aligned to.
-function getSnappedTarget(container) {
-  // In more complicated layouts, we'd need to filter out elements which are in
-  // the subtree of |container| but are also within the subtree of a scroll
-  // container descendant of |container|.
-  const snapAreas = container.querySelectorAll(".snaparea");
+// Get the distance of |area|'s left edge, relative to the viewport from its
+// snap-aligned position.
+function GetSnapDistance(container, area) {
+  const alignedOffset = GetAlignedOffset(container, area);
 
-  for (const area of snapAreas) {
-    if (isSnapAligned(container, area)) {
-      // Ignores the possibility of multiple areas being aligned.
-      return target;
+  return Math.abs(parseInt(area.getBoundingClientRect().x) - alignedOffset);
+}
+
+// Update the UI to highlight the item that is snapped-to if it has changed.
+function UpdateCurrentSnapTarget() {
+  const snapAreas = carousel.querySelectorAll(".slide_thumbnail");
+  let newSnapTarget = currentSnapTarget;
+  let min_distance = Infinity;
+
+  for (const snapArea of snapAreas) {
+    const distance = GetSnapDistance(carousel, snapArea);
+    if (distance < min_distance) {
+      newSnapTarget = snapArea;
+      min_distance = distance;
     }
   }
+
+  DeEmphasize(hintSnapTarget, /*hint*/true);
+  if (newSnapTarget !== currentSnapTarget) {
+    DeEmphasize(currentSnapTarget);
+  }
+
+  currentSnapTarget = newSnapTarget;
+  Emphasize(currentSnapTarget);
 }
 
-const container = document.getElementById("snapcarousel");
+// Update the UI to highlight, as a hint, the item that the current scrolling
+// is intending to snap to, unless the item is the last snapped-to thing.
+function UpdateHintSnapTarget() {
+  const snapAreas = carousel.querySelectorAll(".slide_thumbnail");
+  let newHintTarget = hintSnapTarget;
+  let min_distance = Infinity;
 
-container.addEventListener("scrollend", () => {
-  const snapTarget = getSnappedTarget(container);
+  for (const snapArea of snapAreas) {
+    const distance = GetSnapDistance(carousel, snapArea);
+    if (distance < min_distance) {
+      newHintTarget = snapArea;
+      min_distance = distance;
+    }
+  }
 
-  HighlightElementAndCorrespondingButton(snapTarget);
+  if (newHintTarget === hintSnapTarget) {
+    return;
+  }
+  
+  DeEmphasize(hintSnapTarget, /*hint*/true);
+
+  // Don't override the current snap target's style with hint styling.
+  if (newHintTarget === currentSnapTarget) {
+    return;
+  }
+
+  hintSnapTarget = newHintTarget;
+  Emphasize(hintSnapTarget, /*hint*/true);
+}
+
+carousel.addEventListener("scrollend", () => {
+  UpdateCurrentSnapTarget();
 });
 
-container.addEventListener("scroll", () => {
-  const snapTarget = getSnappedTarget(container);
-
-  HighlightElementAndCorrespondingButtonAsHint(snapTarget);
+carousel.addEventListener("scroll", () => {
+  UpdateHintSnapTarget();
 });
-
 
 ```
 which is trying to determine which element the browser has selected as the snap
 target based on the scroll position but may not align with what the browser
-actually picks.
+actually picks. [This example](https://davmila.github.io/SnapEventExamples/carousel-2/proxy.html) uses scroll and scrollend events to synchronize the styles of the images in the carousel and the smaller thumbnails below.
+One thing to note is that when clicking on one of the boxes below to scroll
+the main carousel, all the thumnails between the one corresponding to the 
+current snap target and the one corresponding to the new one are highlighted 
+before the snap actually happens. This happens because the `scroll` event 
+doesn't know which is the eventual snap target, causing the page to invoke 
+the style change several unnecessarily several times. `scrollsnapchanging`
+lets the page know as early as possible what the eventual snap target is.
 
 In cases where multiple elements could be considered snap-aligned, e.g. grid of
 snap areas, the developer would need to write a bit more code to figure out
@@ -188,17 +223,46 @@ In the case of the layout example above, the developer would only need to write
 the following to detect changes in snap targets:
 
 ```
-const snapcarousel = document.getElementById("snapcarousel");
 
-snapcarousel.addEventListener("scrollsnapchange", (evt) => {
-  HighlightElementAndCorrespondingButton(evt.snapTargetInline);
+carousel.addEventListener("scrollsnapchange", (evt) => {
+  console.log(`snapchange to ${evt.snapTargetInline.id}`);
+  DeEmphasize(hintSnapTarget, /*hint*/true);
+  if (currentSnapTarget === evt.snapTargetInline) {
+    return;
+  }
+  DeEmphasize(currentSnapTarget);
+  currentSnapTarget = evt.snapTargetInline;
+  Emphasize(currentSnapTarget);
 });
 
-snapcarousel.addEventListener("scrollsnapchanging", (evt) => {
-  HighlightElementAndCorrespondingButtonAsHint(evt.snapTargetInline);
+carousel.addEventListener("scrollsnapchanging", (evt) => {
+  DeEmphasize(hintSnapTarget, /*hint*/true);
+  if (evt.snapTargetInline === currentSnapTarget) {
+    return;
+  }
+  hintSnapTarget = evt.snapTargetInline;
+  Emphasize(hintSnapTarget, /*hint*/true);
 });
+
+carousel.addEventListener("scrollend", () => {
+  if (hintSnapTarget != currentSnapTarget) {
+    DeEmphasize(hintSnapTarget, /*hint*/true);
+
+    hintSnapTarget = null;
+    Emphasize(currentSnapTarget);
+    return;
+  }
+});
+
 ```
 without the risk of computing the wrong thing.
+[This example](https://davmila.github.io/SnapEventExamples/carousel-2/real.html) uses snap events (currently only implemented behind and experiment in Chrome) instead of scroll/scrollend events.
+
+Additionally [here](https://codepen.io/argyleink/pen/oNOWwKq) is a date-time 
+picker example which uses snap events to update the displayed date/time.
+
+At this moment, the functionality in these examples can only be seen
+with recent versions of Chrome which have experimental web features enabled.
 
 <br>
 
@@ -337,7 +401,10 @@ One edge case this may not cover is the case where a developer wants to style
 `scrollsnapchanged` targets differently from `scrollsnapchanging` targets.
 Specifically, they would not be able to make this differentiation for a layout
 change that would lead to a `scrollsnapchanged` event without a scroll occuring
-(in which case no `scroll` or `scrollend` event would be dispatched). It might be possible to
+(in which case no `scroll` or `scrollend` event would be dispatched, like in 
+[this scroll/scrollend example](https://davmila.github.io/SnapEventExamples/carousel/proxy.html) where you an delete slides. Its snap event counterpart 
+is [this example](https://davmila.github.io/SnapEventExamples/carousel/real.html)). 
+It might be possible to
 bridge this particular gap by having `scroll` events fire before
 `scrollsnapchanging` events. By doing so, if a developer encounters a
 `scrollsnapchanging` event without having observed a `scroll` event (like in the
