@@ -77,10 +77,11 @@ change in snap targets from the third image to the fourth image:
 To do this, the developer will need to know when the image the carousel is
 snapped to has changed and what it has changed to.
 
-To know when it has changed, they might rely on a scrollend event, but this
-limits their awareness to cases where the change in snap targets occured due to
-a scroll. However, a layout change in the page might also trigger a
-change in which element the carousel is snapped to without causing a scroll.
+To know when it has changed, they might rely on scroll and scrollend events but
+this means their script must run on every scroll. This also limits their
+awareness to cases where the change in snap targets occured due to a scroll but
+a layout change in the page might also trigger a change in which element the
+carousel is snapped to without causing a scroll.
 
 To know what it has changed to, the developer would have to examine the all the
 snap areas of the carousel and try to identify which element is snapped to based
@@ -175,39 +176,40 @@ carousel.addEventListener("scrollend", () => {
 carousel.addEventListener("scroll", () => {
   UpdateHintSnapTarget();
 });
-
 ```
 which is trying to determine which element the browser has selected as the snap
 target based on the scroll position but may not align with what the browser
 actually picks. [This example](https://davmila.github.io/SnapEventExamples/carousel-2/proxy.html) uses scroll and scrollend events to synchronize the styles of the images in the carousel and the smaller thumbnails below.
-One thing to note is that when clicking on one of the boxes below to scroll
-the main carousel, all the thumnails between the one corresponding to the 
-current snap target and the one corresponding to the new one are highlighted 
-before the snap actually happens. This happens because the `scroll` event 
-doesn't know which is the eventual snap target, causing the page to invoke 
-the style change several unnecessarily several times. `scrollsnapchanging`
-lets the page know as early as possible what the eventual snap target is.
+One thing to note in this example is that when clicking on a thumbnail below to scroll
+the main carousel, all the thumbnails between the one corresponding to the 
+current snap target and the one corresponding to the new one are momentarily highlighted 
+as the carousel scrolls to its new snap target. This happens because the `scroll` event 
+is not aware of the eventual snap target, causing the page to invoke 
+the style change unnecessarily several times. `scrollsnapchanging`
+is proposed as an event that lets the page know as early as possible what the
+eventual snap target is. Alternatively, an author might use [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API),
+but that only goes as far as telling them that a snap area is visible within the
+scroll port. So, if multiple snap areas are within the snap port, they would still
+need to rely on script similar to the above to determine which snap area is the
+snap target.
 
 In cases where multiple elements could be considered snap-aligned, e.g. grid of
 snap areas, the developer would need to write a bit more code to figure out
-which, among the aligned areas, the browser has selected. They would need to
+which, among the aligned areas, the user-agent has selected. They would need to
 either:
 * implement the user agents' algorithm to
   [select between multiple aligned areas](https://drafts.csswg.org/css-scroll-snap/#multiple-aligned-snap-areas), or
 * test for which element the user agent has snapped to by shifting layout to see
   which element the snap container follows.
 
-The proposed `scrollsnapchanging` event fires while scrolling is happening
-if the user-agent detects that the scrolling gesture will lead to a new snap
-target, e.g. touch scrolling the carousel above to peek at the next image before
-deciding to drag it fully to the carousel's center.
-To accomplish this, the developer would need to have the above code run on every
-scroll event and take action if it detects that the scroll is far enough to
-warrant a change in snap targets.
+A robust implementation would also need to account for several other details that affect the
+user-agent's choice of snap targets, such as:
 
-This represents unnecessary script the page must run since the user-agent is
-already internally making all of these decisions but not exposing them to the
-developer.
+* [proximity strictness](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type#proximity) scroll snapping,
+* snap areas at the extremes of their snap containers such that their theoretical aligned position cannot be reached,
+* snap areas the user-agent considers snapped-to by virtue of their being larger than the scroll port,
+* out-of-flow-positined snap areas which may be within the scroll container's subtree in the DOM but not be within the scrollable overflow area of the scroll container,
+* scroll-margin; this is accounted for in the sample code above, but any future CSS property which affects scroll-snapping like scroll-margin does could render any existing snap-point calculating code incorrect.
 
 ## Proposed Solution
 
@@ -215,21 +217,25 @@ New events for scroll snap containers called `scrollsnapchange` and
 `scrollsnapchanging`. `scrollsnapchange` is dispatched when a new snap target
 has been snapped to. `scrollsnapchanging` is dispatched as soon as the UA has
 determined a new snap target during an ongoing scroll operation.
-`scrollsnapchanging` allows the developer give the user a hint that their
-gesture will result in settling on a new item, different from where they were
-previously settled.
+
+The `scrollsnapchanging` event fires while scrolling is happening,
+allowing the page to communicate to the user that their scrolling gesture has
+triggered the selection of a new snap point which the user-agent will settle on
+when the user's gesture is complete.
+
+The `scrollsnapchange` event fires when scrolling is complete and the snap
+point that has been settled on is different from the last snap point that was
+settled on.
+
+Both events would be triggered by a layout shift resulting in a change in the
+selected snap target.
 
 In the case of the layout example above, the developer would only need to write
 the following to detect changes in snap targets:
 
 ```
-
 carousel.addEventListener("scrollsnapchange", (evt) => {
-  console.log(`snapchange to ${evt.snapTargetInline.id}`);
   DeEmphasize(hintSnapTarget, /*hint*/true);
-  if (currentSnapTarget === evt.snapTargetInline) {
-    return;
-  }
   DeEmphasize(currentSnapTarget);
   currentSnapTarget = evt.snapTargetInline;
   Emphasize(currentSnapTarget);
@@ -237,34 +243,24 @@ carousel.addEventListener("scrollsnapchange", (evt) => {
 
 carousel.addEventListener("scrollsnapchanging", (evt) => {
   DeEmphasize(hintSnapTarget, /*hint*/true);
-  if (evt.snapTargetInline === currentSnapTarget) {
-    return;
-  }
   hintSnapTarget = evt.snapTargetInline;
-  Emphasize(hintSnapTarget, /*hint*/true);
+  // Ensure to undo any effects snapchanging away from the
+  // currentSnapTarget may have done.
+  Emphasize(hintSnapTarget, /*hint*/evt.snapTargetInline !== currentSnapTarget);
 });
-
-carousel.addEventListener("scrollend", () => {
-  if (hintSnapTarget != currentSnapTarget) {
-    DeEmphasize(hintSnapTarget, /*hint*/true);
-
-    hintSnapTarget = null;
-    Emphasize(currentSnapTarget);
-    return;
-  }
-});
-
 ```
 without the risk of computing the wrong thing.
-[This example](https://davmila.github.io/SnapEventExamples/carousel-2/real.html) uses snap events (currently only implemented behind and experiment in Chrome) instead of scroll/scrollend events.
+[This example](https://davmila.github.io/SnapEventExamples/carousel-2/real.html)
+uses snap events instead of scroll/scrollend events.*
 
 Additionally [here](https://codepen.io/argyleink/pen/oNOWwKq) is a date-time 
-picker example which uses snap events to update the displayed date/time.
+picker example which uses snap events to update the displayed date/time.*
 
-At this moment, the functionality in these examples can only be seen
-with recent versions of Chrome which have experimental web features enabled.
-
+*At the moment, examples using `scrollsnapchanging` and `scrollsnapchange`
+are only functional in Chrome with experimental web features enabled.
 <br>
+
+## Event Interfaces
 
 **Type**: scrollsnapchange (inspired by [`snapped` comment](https://github.com/w3c/csswg-drafts/issues/156#issuecomment-695085852))  
 **Interface**: SnapEvent  
@@ -287,7 +283,8 @@ with recent versions of Chrome which have experimental web features enabled.
 **Context (trusted events):** 
 <br>
 
-These events implement a SnapEvent interface.
+
+These events implement a `SnapEvent` interface.
 
 ```
 interface SnapEvent : Event {
@@ -329,8 +326,8 @@ which the above-described API provides.
 
 In many use cases, when a change in snap targets occurs, a developer would want
 to de-emphasize the element that was previously snapped to and emphasize the
-element that is currently snapped to. previousSnapTarget would provide a
-convenient way to do this indicating the element that was previously snapped to.
+element that is currently snapped to. `previousSnapTarget` would provide a
+convenient way to do this by indicating the element that was previously snapped to.
 This might be purely a convenience for developers as they could track
 this across different occurrences of the snap events. However, in a scenario with an
 arbitrary number of snap containers, this convenience could prove to have
@@ -347,9 +344,9 @@ it.
 
 #### SnapEvent.alignedSnapAreas{Block|Inline}
 
-It's possible for multiple snap areas within a snapport to appear visually
-snap-aligned, even though user-agent only selected one element as they must know
-which elements to track during layout shifts. For this
+It is possible for multiple snap areas within a snapport to appear visually
+snap-aligned, even though user-agents only select one element as they must know
+which element to track during layout shifts. For this
 case, it might be worth considering whether to expose the set of elements which
 are so aligned.
 
@@ -376,46 +373,47 @@ interface SnapEvent : Event {
 ### Dispatching SnapEvents to the snap target rather than the snap container
 
 Instead of dispatching the snap events to the snap container, we could dispatch
-them to element that was snapped to. This makes the events
-less similar scroll and scrollend events which are dispatched to the container.
+them to the element that was snapped to. This makes the events
+less similar to scroll and scrollend events which are dispatched to the container.
 
 If a page has several snap containers and a developer wanted to style the
 snapped-to element according to the container it belonged to, the event would need
 to contain information about which scroll container the snapped-to element belongs to and in which axis it
 was snapped to. (Although in theory a developer could write some JavaScript to
 figure this out, it would seem less than ideal and quite possibly prone to
-errors). This style-per-container scenario would be roughly equivalent to
-dispatching the event to the container as described above and perhaps suggests giving preference to
+errors). Catering to this style-per-container scenario would be roughly equivalent to
+dispatching the event to the container as proposed and perhaps suggests giving preference to
 maintaining similarity with scroll and scrollend events.
 
-### One Event VS Two Events
+Additionally, this might not work naturally for pseudo-elements which can
+be snap targets as there is not currently a way to interact with pseudo-elements
+via JavaScript.
 
-Much of what can be achieved with `scrollsnapchanging` and `scrollsnapchanged` can
+### One Event vs. Two Events
+
+Much of what can be achieved with `scrollsnapchanging` and `scrollsnapchange` can
 probably be achieved with `scrollsnapchanging` and the existing `scrollend` event.
-If a developer wants to make certain style adjustments when a `scrollsnapchanged`
+If a developer wants to make certain style adjustments when a `scrollsnapchange`
 event occurs, they could simply use `scrollsnapchanging` to track the most recent
 choice of snap targets and, upon `scrollend`, perform their style adjustments
 according to the tracked information as desired.
 
-One edge case this may not cover is the case where a developer wants to style
-`scrollsnapchanged` targets differently from `scrollsnapchanging` targets.
+One edge case this might not cover is the case where a developer wants to style
+`scrollsnapchange` targets differently from `scrollsnapchanging` targets.
 Specifically, they would not be able to make this differentiation for a layout
-change that would lead to a `scrollsnapchanged` event without a scroll occuring
+change that would lead to a `scrollsnapchange` event without a scroll occuring
 (in which case no `scroll` or `scrollend` event would be dispatched, like in 
-[this scroll/scrollend example](https://davmila.github.io/SnapEventExamples/carousel/proxy.html) where you an delete slides. Its snap event counterpart 
+[this scroll/scrollend example](https://davmila.github.io/SnapEventExamples/carousel/proxy.html) where you can delete slides. Its snap event counterpart 
 is [this example](https://davmila.github.io/SnapEventExamples/carousel/real.html)). 
 It might be possible to
 bridge this particular gap by having `scroll` events fire before
 `scrollsnapchanging` events. By doing so, if a developer encounters a
 `scrollsnapchanging` event without having observed a `scroll` event (like in the
 layout change scenario described) they would know not to expect a `scrollend`
-event and treat that `scrollsnapchanging` event like a `scrollsnapchanged` event.
+event and treat that `scrollsnapchanging` event like a `scrollsnapchange` event.
 
 While bridging this gap with `scroll` events seems feasible, it does leave the
-developer with a little bit more work to do and leaves their application
-subject to a little bit more uncertainty tied to whether the correct events
-fired were fired and handled in the correct order whereas there might be less uncertainty
-and less work to do if they could rely on a dedicated `scrollsnapchanged` event.
+developer with a little bit more state to track and more edge cases to handle across JavaScript event listeners. It seems preferable to be able to rely on a dedicated `scrollsnapchange` event.
 
 Additionally, the pattern of changing/changed events could offer some ergonomic
 value to developers given such analogous precedents as `scroll`/`scrollend` events,
