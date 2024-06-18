@@ -62,14 +62,14 @@ For example, given the following HTML:
   <div id="button5" class="imgbutton"></div>
 </div>
 ```
-where snapcarousel contains a set of images which can be viewed by
-scrolling horizontally and snapcarouselctrl gives an alternative way to scroll
-snapcarousel using buttons which can be used to select the image to be centered
-within snapcarousel.
+where `snapcarousel` contains a set of images which can be viewed by
+scrolling horizontally and `snapcarouselctrl` gives an alternative way to scroll
+`snapcarousel` via buttons which, when clicked, scrolls their associated image
+to `snapcarousel`'s center.
 
 A developer might want to synchronize the styles of both the
-image selected in snapcarousel and its corresponding button in snapcarouselctrl,
-like in the following image when the user drags their finger so as to cause a
+image selected in `snapcarousel` and its corresponding button in `snapcarouselctrl`,
+like in the following image when the user drags the scrollbar so as to cause a
 change in snap targets from the third image to the fourth image:
 
 ![Snap Carousel Explainer](https://i.imgur.com/6BtkRIt.png)
@@ -179,7 +179,7 @@ carousel.addEventListener("scroll", () => {
 ```
 which is trying to determine which element the browser has selected as the snap
 target based on the scroll position but may not align with what the browser
-actually picks. [This example](https://davmila.github.io/SnapEventExamples/carousel-2/proxy.html) uses scroll and scrollend events to synchronize the styles of the images in the carousel and the smaller thumbnails below.
+actually picks. [This slideshow example](https://davmila.github.io/SnapEventExamples/carousel-2/proxy.html) uses scroll and scrollend events to synchronize the styles of the images in the carousel and the smaller thumbnails below.
 One thing to note in this example is that when clicking on a thumbnail below to scroll
 the main carousel, all the thumbnails between the one corresponding to the 
 current snap target and the one corresponding to the new one are momentarily highlighted 
@@ -211,12 +211,15 @@ user-agent's choice of snap targets, such as:
 * out-of-flow-positined snap areas which may be within the scroll container's subtree in the DOM but not be within the scrollable overflow area of the scroll container,
 * scroll-margin; this is accounted for in the sample code above, but any future CSS property which affects scroll-snapping like scroll-margin does could render any existing snap-point calculating code incorrect.
 
+It's also worth noting that user-agents already handle all of this.
+
 ## Proposed Solution
 
-New events for scroll snap containers called `scrollsnapchange` and
-`scrollsnapchanging`. `scrollsnapchange` is dispatched when a new snap target
-has been snapped to. `scrollsnapchanging` is dispatched as soon as the UA has
-determined a new snap target during an ongoing scroll operation.
+We propose new JavaScript events for scroll snap containers
+called `scrollsnapchange` and `scrollsnapchanging`. `scrollsnapchange` is
+dispatched when a new snap target has been snapped to. `scrollsnapchanging` is
+dispatched as soon as the UA has determined a new snap target during an ongoing
+scroll operation.
 
 The `scrollsnapchanging` event fires while scrolling is happening,
 allowing the page to communicate to the user that their scrolling gesture has
@@ -250,8 +253,10 @@ carousel.addEventListener("scrollsnapchanging", (evt) => {
 });
 ```
 without the risk of computing the wrong thing.
-[This example](https://davmila.github.io/SnapEventExamples/carousel-2/real.html)
-uses snap events instead of scroll/scrollend events.*
+[This slideshow example](https://davmila.github.io/SnapEventExamples/carousel-2/real.html)
+is visually identical to the slideshow example mentioned earlier but it uses the
+`scrollsnapchanging` and `scrollsnapchange` event listeners above instead of
+scroll/scrollend events.*
 
 Additionally [here](https://codepen.io/argyleink/pen/oNOWwKq) is a date-time 
 picker example which uses snap events to update the displayed date/time.*
